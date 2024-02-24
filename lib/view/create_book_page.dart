@@ -42,20 +42,20 @@ class _CreateBookState extends State<CreateBook> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title:
-            Text('Add Book Details', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text('Add Book Details', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 20, top: 30),
+        margin: const EdgeInsets.only(left: 20, top: 30),
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20), // Set the top margin as needed
+              margin: const EdgeInsets.only(top: 20), // Set the top margin as needed
               child: Row(
                 children: [
                   Container(
                     width: 80,
-                    child: Text(
+                    child: const Text(
                       "Title",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
@@ -69,12 +69,12 @@ class _CreateBookState extends State<CreateBook> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20), // Set the top margin as needed
+              margin: const EdgeInsets.only(top: 20), // Set the top margin as needed
               child: Row(
                 children: [
                   Container(
                     width: 80,
-                    child: Text(
+                    child: const Text(
                       "Author",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
@@ -88,12 +88,12 @@ class _CreateBookState extends State<CreateBook> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20), // Set the top margin as needed
+              margin: const EdgeInsets.only(top: 20), // Set the top margin as needed
               child: Row(
                 children: [
                   Container(
                     width: 80,
-                    child: Text(
+                    child: const Text(
                       "Borrower",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
@@ -107,13 +107,13 @@ class _CreateBookState extends State<CreateBook> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               // Set the top margin as needed
               child: Row(
                 children: [
                   Container(
                     width: 80,
-                    child: Text(
+                    child: const Text(
                       "Issued on",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
@@ -136,7 +136,7 @@ class _CreateBookState extends State<CreateBook> {
                   backgroundColor: MaterialStateProperty.all<Color>(
                       Colors.blue), // Set the background color to blue
                 ),
-                child: Text(
+                child: const Text(
                   'Submit',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),

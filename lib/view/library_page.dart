@@ -12,128 +12,10 @@ class Library extends StatefulWidget {
 }
 
 class _LibraryState extends State<Library> {
-  TextEditingController bookController = TextEditingController();
-  TextEditingController authorController = TextEditingController();
-  TextEditingController borrowerController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-
-  Future _popup(String id) => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Container(
-            child: ListView(
-              shrinkWrap: true,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.cancel),
-                ),
-                SizedBox(
-                  width: 60,
-                ),
-                Text(
-                  'Edit',
-                  style: TextStyle(color: Colors.blue, fontSize: 20),
-                ),
-                Text(
-                  'Details',
-                  style: TextStyle(color: Colors.blue, fontSize: 20),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  // Set the top margin as needed
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 80,
-                        child: Text(
-                          "Book",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                      ),
-                      Container(
-                        width: 150,
-                        child: UiHelper.CustomTextField(
-                            bookController, "Book Name", Icons.book, false),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  // Set the top margin as needed
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 80,
-                        child: Text(
-                          "Author",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                      ),
-                      Container(
-                        width: 150,
-                        child: UiHelper.CustomTextField(
-                            authorController, "Author Name", Icons.book, false),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  // Set the top margin as needed
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 80,
-                        child: Text(
-                          "Borrower",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                      ),
-                      Container(
-                        width: 150,
-                        child: UiHelper.CustomTextField(
-                            borrowerController, "Borrower Name", Icons.person, false),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  // Set the top margin as needed
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 80,
-                        child: Text(
-                          "Issued on",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                      ),
-                      Container(
-                        width: 150,
-                        child: UiHelper.CustomTextField(
-                            dateController, "Enter Date", Icons.calendar_month, false),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Center(
-                    child: UiHelper.CustomButton(() {
-                  _handleUpdateBook(id);
-                }, 'Update'))
-              ],
-            ),
-          ),
-        ),
-      );
+  final TextEditingController bookController = TextEditingController();
+  final TextEditingController authorController = TextEditingController();
+  final TextEditingController borrowerController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   Future<void> _handleUpdateBook(id) async {
     try {
@@ -168,18 +50,18 @@ class _LibraryState extends State<Library> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateBook()),
+            MaterialPageRoute(builder: (context) => const CreateBook()),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       appBar: AppBar(
         title:
-            Text('Library Management', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text('Library Management', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
           children: [
             Expanded(child: _buildBookDetailsList2()),
@@ -199,7 +81,7 @@ class _LibraryState extends State<Library> {
               List<Book>? books = snapshot.data;
 
               if (books == null || books.isEmpty) {
-                return Text('No books Found');
+                return const Text('No books Found');
               } else {
                 return ListView.builder(
                     itemCount: books.length,
@@ -208,11 +90,11 @@ class _LibraryState extends State<Library> {
                     });
               }
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text('Something went wrong!'),
               );
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -224,12 +106,12 @@ class _LibraryState extends State<Library> {
 
   Widget _booKTile(Book book) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       child: Material(
         elevation: 5,
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -240,7 +122,7 @@ class _LibraryState extends State<Library> {
             children: [
               Text(
                 "Book: ${book.title}",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.blue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -250,13 +132,13 @@ class _LibraryState extends State<Library> {
                 children: [
                   Text(
                     "Author: ${book.author}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       bookController.text = book.title;
@@ -265,19 +147,19 @@ class _LibraryState extends State<Library> {
                       dateController.text = book.date;
                       _popup(book.id);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       color: Colors.blue,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5.0,
                   ),
                   IconButton(
                     onPressed: () {
                       _handleDeleteBook(book.id);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       color: Colors.black,
                     ),
@@ -286,7 +168,7 @@ class _LibraryState extends State<Library> {
               ),
               Text(
                 "Borrower: ${book.borrower}",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.blue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -294,7 +176,7 @@ class _LibraryState extends State<Library> {
               ),
               Text(
                 "Date: ${book.date}",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -306,4 +188,122 @@ class _LibraryState extends State<Library> {
       ),
     );
   }
+
+  Future _popup(String id) => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: Container(
+        child: ListView(
+          shrinkWrap: true,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.cancel),
+            ),
+            const SizedBox(
+              width: 60,
+            ),
+            const Text(
+              'Edit',
+              style: TextStyle(color: Colors.blue, fontSize: 20),
+            ),
+            const Text(
+              'Details',
+              style: TextStyle(color: Colors.blue, fontSize: 20),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              // Set the top margin as needed
+              child: Row(
+                children: [
+                  Container(
+                    width: 80,
+                    child: const Text(
+                      "Book",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: UiHelper.CustomTextField(
+                        bookController, "Book Name", Icons.book, false),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              // Set the top margin as needed
+              child: Row(
+                children: [
+                  Container(
+                    width: 80,
+                    child: const Text(
+                      "Author",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: UiHelper.CustomTextField(
+                        authorController, "Author Name", Icons.book, false),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              // Set the top margin as needed
+              child: Row(
+                children: [
+                  Container(
+                    width: 80,
+                    child: const Text(
+                      "Borrower",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: UiHelper.CustomTextField(
+                        borrowerController, "Borrower Name", Icons.person, false),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              // Set the top margin as needed
+              child: Row(
+                children: [
+                  Container(
+                    width: 80,
+                    child: const Text(
+                      "Issued on",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: UiHelper.CustomTextField(
+                        dateController, "Enter Date", Icons.calendar_month, false),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Center(
+                child: UiHelper.CustomButton(() {
+                  _handleUpdateBook(id);
+                }, 'Update'))
+          ],
+        ),
+      ),
+    ),
+  );
 }

@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/models/book_model.dart';
 
 class DatabaseMethods {
+  final _db = FirebaseFirestore.instance.collection("Book");
 
   // Get all books
   Future<List<Book>> getBookDetails() async {
     try {
-      var collectionSnapshot = await FirebaseFirestore.instance.collection("Book").get();
+      var collectionSnapshot = await _db.get();
       List<Book> books = collectionSnapshot.docs.map((doc) => Book.fromJson(doc.data())).toList();
       return books;
     } catch (error) {
@@ -14,12 +15,12 @@ class DatabaseMethods {
     }
   }
 
-  // Add a new book
+  // Add new book
   Future<void> addBookDetails(
       {required title, required id, required author, required borrower, required date}) async {
     Book newBook = Book(title: title, id: id, author: author, borrower: borrower, date: date);
     try {
-      await FirebaseFirestore.instance.collection("Book").doc(id).set(newBook.toJson());
+      await _db.doc(id).set(newBook.toJson());
     } catch (error) {
       throw "Error adding book details";
     }
@@ -30,7 +31,7 @@ class DatabaseMethods {
       {required title, required id, required author, required borrower, required date}) async {
     try {
       Book updatedBook = Book(title: title, id: id, author: author, borrower: borrower, date: date);
-      await FirebaseFirestore.instance.collection("Book").doc(id).update(updatedBook.toJson());
+      await _db.doc(id).update(updatedBook.toJson());
     } catch (error) {
       throw "Error updating book details";
     }
@@ -39,7 +40,7 @@ class DatabaseMethods {
   // Delete book
   Future<void> deleteBookDetail(String id) async {
     try {
-      await FirebaseFirestore.instance.collection("Book").doc(id).delete();
+      await _db.doc(id).delete();
     } catch (error) {
       throw "Error deleting book details";
     }

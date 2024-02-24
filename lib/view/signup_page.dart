@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_project/constants/constants.dart';
 import 'package:first_project/utils/formHelper.dart';
 import 'package:first_project/view/library_page.dart';
 import 'package:first_project/view/login_page.dart';
@@ -17,27 +18,36 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
-  void _handleEmailAndPasswordSignUp(email, password) async {
+  // Function to handle email and password sign up
+  void _handleEmailAndPasswordSignUp() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+
     if (formKey.currentState!.validate()) {
       try {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Library()));
-      } catch (ex) {
-        return UiHelper.CustomAlertBox(context, ex.toString());
+        UserCredential? user =
+            await Authentication().signUpWithEmailAndPassword(email: email, password: password);
+        if (user != null) {
+          print('Signup success');
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const Library()));
+        }
+      } catch (e) {
+        return UiHelper.CustomAlertBox(context, "Error occurred while signup");
       }
     }
   }
 
+  // Function to handle Google sign in
   void _handleGoogleSignIn() async {
     try {
       UserCredential? user = await Authentication().signInWithGoogle();
       if (user != null) {
-        print("Google SignIn successfully");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Library()));
+        print("Google SignIn success");
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Library()));
       }
     } catch (e) {
       UiHelper.CustomAlertBox(context, "Google SignIn Error");
@@ -47,103 +57,110 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text('Sign Up',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          centerTitle: true,
-        ),
-        body: Center(
-            child: Column(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text('Sign Up', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
           children: [
             Image.asset(
-              'assets/images/img.png',
+              AppConstants.FLUTTER_IMAGE_URL,
               height: 100,
             ),
-            Container(
-              width: 300,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      // height: 50,
-                      margin: const EdgeInsets.only(top: 40),
-                      child: TextFormField(
-                          validator: Validators.emailValidator,
-                          controller: emailController,
-                          decoration: customDecoration.customInputDecoration(
-                              "Email", Icons.email)),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: TextFormField(
-                          validator: Validators.passwordValidator,
-                          obscureText: true,
-                          controller: passwordController,
-                          decoration: customDecoration.customInputDecoration(
-                              "Password", Icons.password)),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: TextFormField(
-                          validator: Validators.phoneNumberValidator,
-                          keyboardType: TextInputType.phone,
-                          controller: phoneController,
-                          decoration: customDecoration.customInputDecoration(
-                              "Phone Number", Icons.phone)),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: UiHelper.CustomButton(() {
-                        _handleEmailAndPasswordSignUp(emailController.text.toString(),
-                            passwordController.text.toString());
-                      }, "Submit"),
-                    ),
-                  ],
-                ),
+            _signUpFormWidget(),
+            const SizedBox(height: 20),
+            _navigateToLoginWidget(),
+            const SizedBox(height: 20),
+            _orOptionWidget(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _signUpFormWidget() {
+    return Container(
+      width: 300,
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 40,
+            ),
+            TextFormField(
+                validator: Validators.emailValidator,
+                controller: emailController,
+                decoration: customDecoration.customInputDecoration("Email", Icons.email)),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+                validator: Validators.passwordValidator,
+                obscureText: true,
+                controller: passwordController,
+                decoration: customDecoration.customInputDecoration("Password", Icons.password)),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+                validator: Validators.phoneNumberValidator,
+                keyboardType: TextInputType.phone,
+                controller: phoneController,
+                decoration: customDecoration.customInputDecoration("Phone Number", Icons.phone)),
+            const SizedBox(
+              height: 20,
+            ),
+            UiHelper.CustomButton(_handleEmailAndPasswordSignUp, "Submit"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _navigateToLoginWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Already have an Account?",
+          style: TextStyle(fontSize: 16),
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+            },
+            child: const Text(
+              "Login",
+              style: TextStyle(fontSize: 20),
+            ))
+      ],
+    );
+  }
+
+  Widget _orOptionWidget() {
+    return Column(
+      children: [
+        const Text(
+          "Or Sign In With",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: _handleGoogleSignIn,
+              iconSize: 30,
+              icon: Image.network(
+                AppConstants.GOOGLE_IMAGE_URL,
+                height: 30, // Adjust height as needed
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Already have an Account?",
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 20),
-                    ))
-              ],
-            ),
-            Container(
-                padding: EdgeInsets.only(top: 20),
-                child: Column(
-                  children: [
-                    Text(
-                      "Or Sign In With",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: _handleGoogleSignIn,
-                          iconSize: 30,
-                          padding: EdgeInsets.all(15.0),
-                          icon: Icon(Icons.icecream),
-                        )
-                      ],
-                    )
-                  ],
-                ))
           ],
-        ),),);
+        ),
+      ],
+    );
   }
 }
